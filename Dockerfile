@@ -95,6 +95,9 @@ RUN apk add --no-cache --virtual .build-deps \
     && tar xzf pcre-${RESTY_PCRE_VERSION}.tar.gz \
     && curl -fSL https://openresty.org/download/openresty-${RESTY_VERSION}.tar.gz -o openresty-${RESTY_VERSION}.tar.gz \
     && tar xzf openresty-${RESTY_VERSION}.tar.gz \
+    && curl -fSL https://github.com/intaro/nginx-image-filter-watermark/archive/master.zip -o nginx-image-filter-watermark.zip \
+    && unzip nginx-image-filter-watermark.zip \    
+    && cp nginx-image-filter-watermark-master/ngx_http_image_filter_module.c /tmp/openresty-${RESTY_VERSION}/bundle/nginx-1.13.6/src/http/modules/ngx_http_image_filter_module.c \
     && cd /tmp/openresty-${RESTY_VERSION} \
     && ./configure -j${RESTY_J} ${_RESTY_CONFIG_DEPS} ${RESTY_CONFIG_OPTIONS} ${RESTY_CONFIG_OPTIONS_MORE} \
     && make -j${RESTY_J} \
@@ -102,6 +105,8 @@ RUN apk add --no-cache --virtual .build-deps \
     && cd /tmp \
     && if [ -n "${RESTY_EVAL_POST_MAKE}" ]; then eval $(echo ${RESTY_EVAL_POST_MAKE}); fi \
     && rm -rf \
+        nginx-image-filter-watermark.zip \
+        nginx-image-filter-watermark-master \
         openssl-${RESTY_OPENSSL_VERSION} \
         openssl-${RESTY_OPENSSL_VERSION}.tar.gz \
         openresty-${RESTY_VERSION}.tar.gz openresty-${RESTY_VERSION} \
